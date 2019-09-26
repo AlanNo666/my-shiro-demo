@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alan.shiro.test.dao.api.ShUserMapper">
+    <resultMap id="baseMap" type="com.alan.shiro.test.entity.ShUser" >
+        <id property="id" column="id"></id>
+        <result property="createTime" column="create_time"/>
+        <result property="hash" column="hash"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+    </resultMap>
+    <select id="findPassWordByUserName" resultMap="baseMap" parameterType="string">
+        select password,hash from sh_user where username = #{username};
+    </select>
+    <select id="findUser" resultMap="baseMap" parameterType="string">
+    select * from sh_user where username =#{username};
+    </select>
+    <insert id="insertUser">
+        insert into sh_user
+        (id,username,password,hash,create_time)
+        values
+        (#{id},#{username},#{password},#{hash},#{createTime})
+    </insert>
+</mapper>
