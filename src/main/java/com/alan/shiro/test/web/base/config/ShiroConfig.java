@@ -4,13 +4,14 @@ import com.alan.shiro.test.service.RedisCache.RedisCacheManager;
 import com.alan.shiro.test.service.RedisCache.RedisSessionDAO;
 import com.alan.shiro.test.service.RedisCache.RedisSessionManaager;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.SimpleCookie;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,7 +35,6 @@ public class ShiroConfig {
         myRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         myRealm.setAuthorizationCachingEnabled(true);
         myRealm.setCachingEnabled(true);
-        myRealm.setAuthenticationCachingEnabled(true);
         return myRealm;
     }
 
@@ -58,6 +58,10 @@ public class ShiroConfig {
         return filter;
     }
 
+    /**
+     * Shiro生命周期处理器
+     * @return
+     */
     @Bean
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor(){
         return new LifecycleBeanPostProcessor();
@@ -81,6 +85,22 @@ public class ShiroConfig {
        RedisSessionDAO redisDao =  new RedisSessionDAO();
         return redisDao;
     }
+
+
+    /**
+     * 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证
+     * 配置以下两个bean(DefaultAdvisorAutoProxyCreator(可选)和AuthorizationAttributeSourceAdvisor)即可实现此功能
+     * @return
+     */
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(){
+        AuthorizationAttributeSourceAdvisor sourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        sourceAdvisor.setSecurityManager(defaultSecurityManager());
+        return sourceAdvisor;
+    }
+
+
 
 
 

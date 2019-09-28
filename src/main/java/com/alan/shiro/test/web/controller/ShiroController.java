@@ -6,6 +6,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,4 +63,21 @@ public class ShiroController {
     public String registerUser(){
         return "ok";
     }
+
+
+    /**
+     *     @RequiresRoles需拥有 admin 角色
+     *     @RequiresGuest  游客
+     *     @RequiresAuthentication 当前Subject已经通过login进行身份验证;即 Subjec.isAuthenticated()返回
+     *     @RequiresUser 表示当前Subject已经身份验证或者通过记住我登录的
+     *     @RequiresPermissions()  哪个权限
+     * @return
+     */
+    @RequiresRoles(value = {"admin"})
+    @RequestMapping("/member/testRole")
+    public String testRole(){
+        return "ok";
+    }
+
+
 }

@@ -183,6 +183,21 @@
             <version>1.6.2.RELEASE</version>
         </dependency>
 
+        <!--aop -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+            <optional>true</optional>
+            <scope>${jar.scope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+            <optional>true</optional>
+            <scope>${jar.scope}</scope>
+        </dependency>
 
 
 
