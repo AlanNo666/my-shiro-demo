@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.alan.shiro.test.dao.api.ShUserRoleMapper">
-    <select id="selectRole" parameterType="string" resultType="string">
-      select role from sh_user_role where username = #{username};
-    </select>
-    <insert id="insertRole" parameterType="com.alan.shiro.test.entity.UserRole">
-    </insert>
-</mapper>
