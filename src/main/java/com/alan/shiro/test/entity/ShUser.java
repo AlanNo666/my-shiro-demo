@@ -1,12 +1,15 @@
 package com.alan.shiro.test.entity;
 
 
-public class ShUser {
+import java.io.Serializable;
+
+public class ShUser implements Serializable {
     private String id;
     private String username;
     private String password;
     private String  hash;
     private String createTime;
+
 
     public String getId() {
         return id;

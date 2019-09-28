@@ -20,10 +20,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
     private void saveSession(Session session) {
         if (session != null && session.getId() != null) {
-            //相当于session.setAttribute(key,value)
             String key = getKey(session.getId().toString());
-            //将session序列化为byte数组
-//            byte[] value = SerializationUtils.serialize(session);
              redisManager.set(key, session);
              redisManager.expire(key, 600);
         }
@@ -66,12 +63,12 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
     @Override
     protected Serializable doCreate(Session session) {
+        System.out.println("do create Session");
         //生成sessionId
         Serializable sessionId = generateSessionId(session);
         //将session和sessionId捆绑
         assignSessionId(session, sessionId);
         saveSession(session);
-
         return sessionId;
     }
 

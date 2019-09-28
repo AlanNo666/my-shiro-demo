@@ -17,7 +17,6 @@ public class TestController {
 
     @RequestMapping
     public String test() {
-        System.out.println(prop.getUserName());
         return "mvc ok";
     }
 

@@ -1,21 +1,16 @@
 package com.alan.shiro.test.web.base.config;
 
 import com.alan.shiro.test.service.RedisCache.RedisCacheManager;
-import com.alan.shiro.test.service.RedisCache.RedisManager;
-import com.alan.shiro.test.service.props.RedisProps;
+import com.alan.shiro.test.service.RedisCache.RedisSessionDAO;
+import com.alan.shiro.test.service.RedisCache.RedisSessionManaager;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,9 +20,11 @@ public class ShiroConfig {
 
 
     @Bean
-    public DefaultSecurityManager defaultSecurityManager(){
-        DefaultSecurityManager manager =  new DefaultWebSecurityManager();
+    public DefaultWebSecurityManager defaultSecurityManager(){
+        DefaultWebSecurityManager manager =  new DefaultWebSecurityManager();
         manager.setRealm(myRealm());
+        manager.setSessionManager(mySessionManager());
+        manager.setCacheManager(redisCacheManager());
         return manager;
     }
 
@@ -35,9 +32,9 @@ public class ShiroConfig {
     public MyRealm myRealm(){
         MyRealm myRealm =new MyRealm();
         myRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        myRealm.setAuthorizationCachingEnabled(true);
         myRealm.setCachingEnabled(true);
         myRealm.setAuthenticationCachingEnabled(true);
-        myRealm.setCacheManager(redisCacheManager());
         return myRealm;
     }
 
@@ -67,9 +64,24 @@ public class ShiroConfig {
     }
 
     @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
         return new PasswordHashedCredentials();
     }
+
+    @Bean
+    public RedisSessionManaager  mySessionManager(){
+        RedisSessionManaager  sessionManager = new RedisSessionManaager ();
+        sessionManager.setSessionDAO(redisSessionDAO());
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        return sessionManager;
+    }
+
+    @Bean
+    public RedisSessionDAO redisSessionDAO(){
+       RedisSessionDAO redisDao =  new RedisSessionDAO();
+        return redisDao;
+    }
+
 
 
 

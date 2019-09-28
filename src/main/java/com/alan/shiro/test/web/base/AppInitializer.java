@@ -8,7 +8,6 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
     }
 
     protected Class<?>[] getServletConfigClasses() {
-        System.out.println("11111");
         return new Class[]{WebConfig.class};
     }
 

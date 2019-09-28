@@ -9,6 +9,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,7 +43,7 @@ public class ShiroController {
         }
         ShUser u = userService.getUser(username);
         sub.getSession().setAttribute(u.getUsername(),u);
-        return "thi is login page";
+        return "this is login page";
     }
 
     @RequestMapping("/logout")
@@ -55,5 +56,10 @@ public class ShiroController {
     @RequestMapping("/registerUser")
     public String registerUser(ShUser user){
         return userService.registerUser(user).toString();
+    }
+
+    @RequestMapping("/member/test")
+    public String registerUser(){
+        return "ok";
     }
 }
